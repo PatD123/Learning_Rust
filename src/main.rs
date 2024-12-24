@@ -46,18 +46,59 @@ impl Sorter {
             }
         }
     }
+
+    fn heapify<T>(nums: &mut [T], n: usize, i: usize)
+    where
+        T: std::cmp::PartialOrd + std::marker::Copy,
+    {
+        let mut largest = i;
+        let l = 2 * i + 1;
+        let r = 2 * i + 2;
+
+        if l < n && nums[l] > nums[largest]{
+            largest = l;
+        }
+
+        if r < n && nums[r] > nums[largest]{
+            largest = r;
+        }
+
+        if largest != i {
+            nums.swap(i, largest);
+            Self::heapify(nums, n, largest);
+        }
+    }
+
+    fn heap_sort<T>(nums: &mut [T])
+    where
+        T: std::cmp::PartialOrd + std::marker::Copy + std::fmt::Debug
+    {
+        let n = nums.len();
+
+        // Heapify
+        for i in (0..n / 2 - 1).rev() {
+            Self::heapify(nums, n, i);
+        }
+
+        for i in (1..n).rev() {
+            nums.swap(0, i);
+            Self::heapify(nums, i, 0);
+        }
+    }
 }
 
 fn main() {
     let mut vec_of_ints = vec![9, 8, 7, 6, 5, 4, 3, 2, 1];
-    Sorter::basic_sort(&mut vec_of_ints);
+    // Sorter::basic_sort(&mut vec_of_ints);
 
     let mut vec_of_chars = vec!['p', 'a', 't', 'r', 'i', 'c', 'k',];
-    Sorter::basic_sort(&mut vec_of_chars);
+    // Sorter::basic_sort(&mut vec_of_chars);
 
-    Sorter::merge_sort(&mut vec_of_ints, 0, 8);
+    // Sorter::merge_sort(&mut vec_of_ints, 0, 8);
 
-    Sorter::merge_sort(&mut vec_of_chars, 0, 6);
-    
+    // Sorter::merge_sort(&mut vec_of_chars, 0, 6);
+
+    Sorter::heap_sort(&mut vec_of_chars);
+
     println!("{:?}", vec_of_chars);
 }
